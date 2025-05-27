@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Funcionário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        escura: '#4c4343',
+                        rosaClaro: '#f3e7e2',
+                        quaseBranco: '#f7f2f2',
+                        brancoPuro: '#fcfaf9',
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-quaseBranco text-escura font-sans min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-6">
+        <h1 class="text-2xl font-semibold text-center">Cadastrar Funcionário</h1>
+
+        {% if error %}
+            <p class="text-red-600 text-center">{{ error }}</p>
+        {% endif %}
+
+        <form method="post" action="{{ request.route_url('funcionario_create') }}" class="space-y-4">
+            <div>
+                <label for="nome" class="block text-sm font-medium">Nome</label>
+                <input type="text" id="nome" name="nome" required
+                    class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-escura">
+            </div>
+
+            <div>
+                <label for="cargo" class="block text-sm font-medium">Especialidade</label>
+                <input type="text" id="cargo" name="cargo"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-escura">
+            </div>
+
+            <div>
+                <label for="telefone" class="block text-sm font-medium">Telefone</label>
+                <input type="text" id="telefone" name="telefone"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-escura">
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium">E-mail</label>
+                <input type="email" id="email" name="email"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-escura">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-escura text-white py-2 px-4 rounded-md ">
+                Cadastrar
+            </button>
+        </form>
+    </div>
+</body>
+</html>

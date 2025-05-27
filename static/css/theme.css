@@ -1,0 +1,12 @@
+/* meuprojeto\static\css\theme.css */
+
+@font-face {
+  font-family: 'Vanilla Ravioli';
+  src: url('../fonts/VanillaRavioli_Demo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-ravioli {
+  font-family: 'Vanilla Ravioli', cursive;
+}

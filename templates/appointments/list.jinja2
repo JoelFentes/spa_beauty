@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendamentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    escura: '#4c4343',
+                    rosaClaro: '#f3e7e2',
+                    quaseBranco: '#f7f2f2',
+                    brancoPuro: '#fcfaf9',
+                },
+            }
+        }
+    }
+    </script>
+</head>
+<body class="bg-quaseBranco text-escura min-h-screen font-sans" style="font-family: 'Quicksand', sans-serif;">
+    <div class="container mx-auto p-8">
+        <h1 class="text-4xl font-bold mb-8 text-center">Lista de Agendamentos</h1>
+
+        <table class="w-full bg-white shadow rounded-lg overflow-hidden">
+            <thead class="bg-escura text-white">
+                <tr>
+                    <th class="p-4 text-left">Cliente</th>
+                    <th class="p-4 text-left">Serviço</th>
+                    <th class="p-4 text-left">Funcionário</th>
+                    <th class="p-4 text-left">Data e Hora</th>
+                    <th class="p-4 text-left">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in appointments %}
+                <tr class="border-b hover:bg-rosaClaro">
+                    <td class="p-4">{{ a.client.nome }}</td>
+                    <td class="p-4">{{ a.service.nome }}</td>
+                    <td class="p-4">{{ a.funcionario.nome }}</td>
+                    <td class="p-4">{{ a.data_hora.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td class="p-4 capitalize">{{ a.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

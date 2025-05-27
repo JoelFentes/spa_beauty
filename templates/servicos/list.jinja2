@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Serviços</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    escura: '#4c4343',
+                    rosaClaro: '#f3e7e2',
+                    quaseBranco: '#f7f2f2',
+                    brancoPuro: '#fcfaf9',
+                },
+            }
+        }
+    }
+    </script>
+</head>
+<body class="bg-quaseBranco text-escura min-h-screen font-sans" style="font-family: 'Quicksand', sans-serif;">
+    <div class="container mx-auto p-8">
+        <h1 class="text-4xl font-bold mb-8 text-center">Serviços Disponíveis</h1>
+
+        <table class="w-full bg-white shadow rounded-lg overflow-hidden">
+            <thead class="bg-escura text-white">
+                <tr>
+                    <th class="p-4 text-left">Nome</th>
+                    <th class="p-4 text-left">Descrição</th>
+                    <th class="p-4 text-left">Duração</th>
+                    <th class="p-4 text-left">Preço</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in servicos %}
+                <tr class="border-b hover:bg-rosaClaro">
+                    <td class="p-4">{{ s.nome }}</td>
+                    <td class="p-4">{{ s.descricao or '-' }}</td>
+                    <td class="p-4">{{ s.duracao_minutos or '-' }} minutos</td>
+                    <td class="p-4">R$ {{ '%.2f' % s.preco }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

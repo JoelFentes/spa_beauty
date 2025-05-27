@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Home</title>
+
+        <!-- Tailwind CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                    escura: '#4c4343',
+                    rosaClaro: '#f3e7e2',
+                    quaseBranco: '#f7f2f2',
+                    brancoPuro: '#fcfaf9',
+                    },
+                }
+            }
+        }
+        </script>
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ request.static_url('meuprojeto:static/css/theme.css') }}">
+       
+        <style>
+            html {
+                scroll-behavior: smooth;
+            }
+        </style>
+    </head>
+    <body style="font-family: 'Quicksand', sans-serif;" class="bg-quaseBranco text-escura w-full h-full">
+        <header class="lg:px-16 px-4 bg-white flex items-center justify-between py-6 shadow-md">
+            <a href="#" class="text-3xl font-semibold">Beauty</a>
+           <nav>
+                <ul class="flex space-x-6 text-xl text-gray-700">
+                    <li><a class="hover:underline" href="#servicos">Serviços</a></li>
+                    <li><a class="hover:underline" href="#agendamento">Agendamento</a></li>
+                    <li><a class="hover:underline" href="#sobre">Sobre</a></li>
+                    <li><a class="hover:underline" href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="flex items-center justify-around h-full py-10 px-20">
+            <h1 class="text-[5rem]/[1] font-bold pb-20 ">Cuide do <br/>seu Corpo!</h1>
+
+          <div class="flex">
+              <div
+                class="w-[35rem] h-[35rem] bg-cover bg-center rounded-tl-[420px] rounded-bl-[220px] rounded-br-[420px] rounded-tr-[220px] shadow-lg"
+                style="background-image: url('{{ request.static_url("meuprojeto:static/images/home.jpg") }}');"
+            >
+            </div>
+             <div
+                class="absolute right-[14rem] w-[35rem] h-[35rem]  rounded-tl-[420px] rounded-bl-[220px] rounded-br-[420px] rounded-tr-[220px] shadow-lg border-2 border-escura bg-transparent"
+            >
+            </div>
+          </div>
+        </div>
+
+        <!-- "About" -->
+        <section id="sobre" class="h-screen bg-rosaClaro flex items-center justify-center px-10">
+            <div class="w-3/4 h-3/4 p-10 rounded-lg shadow-lg bg-gray-200 bg-cover bg-bottom"
+                style="background-image: url('{{ request.static_url("meuprojeto:static/images/about.jpg") }}');">
+                <div class="relative left-[26rem] top-[6rem] w-[500px]">
+                    <h2 class="text-4xl/[1] font-bold mb-6">Bem vindo(a) ao <br/>SPA Beauty!</h2>
+                    <p class="text-3xl/[1] mb-6">Conheça nossos serviços e <br/>agende seu horário com facilidade<br/> e conforto.</p>
+                </div>
+            </div>
+        </section>
+
+       <!-- "Services" -->
+        <section id="servicos" class="h-screen bg-quaseBranco flex items-start justify-start px-10">
+            <div class="flex flex-col p-20">
+                <div class="mb-12">
+                    <h2 class="text-5xl/[1] font-bold mb-4">Serviços</h2>
+                    <p class="text-base/[1] mb-6">Relaxamento de corpo e alma, a qualquer momento.</p>
+                </div>
+                <div class="flex w-[80rem] h-full items-center justify-center flex-wrap gap-6">
+                    {% for servico in servicos %}
+                        {% set imagem = servico.imagem.replace('/', ':', 1) if servico.imagem else 'meuprojeto:static/images/about.jpg' %}
+                        <a href="{{ request.route_url('appointment_create') }}" class="no-underline">
+                            <div
+                                class="flex flex-col w-[15rem] h-[20rem] bg-cover bg-center rounded-[15rem] shadow-lg transition-transform hover:scale-105"
+                                style="background-image: url('{{ request.static_url(imagem) }}');"
+                                title="{{ servico.nome }}"
+                            >
+                                <span class="mt-8 font-semibold text-center text-lg text-escura relative top-[20rem] italic">
+                                    {{ servico.nome }}
+                                </span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Contato / Footer -->
+        <footer id="contato" class="bg-escura text-brancoPuro py-10 mt-20">
+            <div class="container mx-auto px-6 flex">
+               <div>
+                    <h2 class="text-3xl font-bold mb-6">Entre em Contato!</h2>
+                    <p class="mb-4">Agende pelo site, ligue para nós ou venha nos visitar!</p>
+
+               </div>
+                <ul class="space-y-2 text-lg ml-10">
+                    <li><strong>Telefone:</strong> (11) 98765-4321</li>
+                    <li><strong>Email:</strong> contato@beautyspa.com</li>
+                    <li><strong>Endereço:</strong> Rua das Flores, 123 - Centro, São Paulo - SP</li>
+                </ul>
+            </div>
+        </footer>
+    </body>
+</html>

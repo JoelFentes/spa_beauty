@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Serviço</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        escura: '#4c4343',
+                        rosaClaro: '#f3e7e2',
+                        quaseBranco: '#f7f2f2',
+                        brancoPuro: '#fcfaf9',
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-quaseBranco text-escura min-h-screen p-10" style="font-family: 'Quicksand', sans-serif;">
+    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-xl p-8">
+        <h1 class="text-3xl font-bold mb-6 text-center">Adicionar Novo Serviço</h1>
+
+        {% if error %}
+            <p class="text-red-600 text-center mb-4">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" class="space-y-4">
+            <div>
+                <label class="block font-semibold mb-1">Nome do Serviço:</label>
+                <input type="text" name="nome" required
+                    class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-rosaClaro" />
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Descrição:</label>
+                <textarea name="descricao" rows="4"
+                    class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-rosaClaro"></textarea>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Caminho da Imagem (relativo):</label>
+                <input type="text" name="imagem" placeholder="ex: meuprojeto:static/images/servico1.jpg"
+                    class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-rosaClaro" />
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Duração (minutos):</label>
+                <input type="number" name="duracao_minutos" min="1" required
+                    class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-rosaClaro" />
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Preço (R$):</label>
+                <input type="number" step="0.01" name="preco" min="0" required
+                    class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-rosaClaro" />
+            </div>
+
+            <button type="submit"
+                class="w-full bg-escura text-white py-3 rounded font-semibold hover:bg-gray-800 transition">
+                Salvar Serviço
+            </button>
+        </form>
+
+        <div class="mt-6 text-center">
+            <a href="{{ request.route_url('service_list') }}" class="text-blue-600 hover:underline">&larr; Voltar para lista de serviços</a>
+        </div>
+    </div>
+</body>
+</html>

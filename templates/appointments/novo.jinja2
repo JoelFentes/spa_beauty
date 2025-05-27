@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendamento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    escura: '#4c4343',
+                    rosaClaro: '#f3e7e2',
+                    quaseBranco: '#f7f2f2',
+                    brancoPuro: '#fcfaf9',
+                },
+            }
+        }
+    }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-quaseBranco text-escura min-h-screen" style="font-family: 'Quicksand', sans-serif;">
+    <div class="container mx-auto p-8">
+        <h1 class="text-4xl font-bold mb-8 text-center">Agende seu Horário</h1>
+
+        {% if error %}
+            <p class="text-red-500 font-semibold text-center mb-4">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Coluna da esquerda (cliente, serviço, funcionário) -->
+                <div class="md:col-span-2 space-y-6">
+                    <!-- Cliente -->
+                    <div>
+                        <label for="client_nome" class="block text-xl mb-2">Nome do Cliente:</label>
+                        <input
+                            type="text"
+                            id="client_nome"
+                            name="client_nome"
+                            placeholder="Digite seu nome"
+                            required
+                            class="w-full border-2 border-escura rounded p-3 text-lg"
+                        >
+                    </div>
+
+                    <!-- Serviço -->
+                    <div>
+                        <label for="service_id" class="block text-xl mb-2">Serviço:</label>
+                        <select name="service_id" id="service_id" required class="w-full border-2 border-escura rounded p-3 text-lg">
+                            <option value="" disabled selected>Selecione um serviço</option>
+                            {% for s in services %}
+                                <option value="{{ s.id }}">{{ s.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Funcionário -->
+                    <div>
+                        <label for="funcionario_id" class="block text-xl mb-2">Funcionário:</label>
+                        <select
+                            name="funcionario_id"
+                            id="funcionario_id"
+                            required
+                            class="w-full border-2 border-escura rounded p-3 text-lg"
+                        >
+                            <option value="" disabled selected>Selecione um funcionário</option>
+                            {% for f in funcionarios %}
+                                <option value="{{ f.id }}">{{ f.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Horários -->
+                    <div>
+                        <label class="block text-xl mb-2">Horário:</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            {% set horarios = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"] %}
+                            {% for h in horarios %}
+                            <button
+                                class="p-4 bg-rosaClaro hover:bg-escura hover:text-white font-semibold rounded transition"
+                                type="button"
+                                onclick="selecionarHorario('{{ h }}')"
+                            >
+                                {{ h }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna da direita (apenas o calendário) -->
+                <div>
+                    <label class="block text-xl mb-2">Data:</label>
+                    <div id="calendar" class="bg-white rounded-lg shadow p-4 w-full">
+                        <div class="flex justify-between items-center mb-4">
+                            <button onclick="mudarMes(-1)" class="text-xl font-bold" type="button">&lt;</button>
+                            <h2 id="mesAno" class="text-xl font-bold text-center flex-1">Mês Ano</h2>
+                            <button onclick="mudarMes(1)" class="text-xl font-bold" type="button">&gt;</button>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 text-center font-semibold text-gray-500 mb-2">
+                            <div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div><div>D</div>
+                        </div>
+                        <div id="dias" class="grid grid-cols-7 gap-2 text-center"></div>
+                    </div>
+                    <input type="hidden" id="data" name="data">
+                    <input type="hidden" id="data_hora_final" name="data_hora">
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let dataAtual = new Date();
+        const diasDiv = document.getElementById('dias');
+        const mesAno = document.getElementById('mesAno');
+        const dataInput = document.getElementById('data');
+        const dataHoraFinalInput = document.getElementById('data_hora_final');
+
+        function renderizarCalendario() {
+            diasDiv.innerHTML = "";
+            const ano = dataAtual.getFullYear();
+            const mes = dataAtual.getMonth();
+            const primeiroDia = new Date(ano, mes, 1).getDay();
+            const totalDias = new Date(ano, mes + 1, 0).getDate();
+
+            mesAno.innerText = dataAtual.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+            for (let i = 0; i < primeiroDia; i++) {
+                diasDiv.innerHTML += `<div></div>`;
+            }
+
+            for (let dia = 1; dia <= totalDias; dia++) {
+                const hoje = new Date();
+                const isHoje = dia === hoje.getDate() && mes === hoje.getMonth() && ano === hoje.getFullYear();
+                diasDiv.innerHTML += `
+                    <div 
+                        class="p-2 rounded-full cursor-pointer ${isHoje ? 'bg-indigo-600 text-white' : 'hover:bg-indigo-100'}"
+                        onclick="selecionarData(${ano}, ${mes}, ${dia})"
+                    >${dia}</div>
+                `;
+            }
+        }
+
+        function mudarMes(offset) {
+            dataAtual.setMonth(dataAtual.getMonth() + offset);
+            renderizarCalendario();
+        }
+
+        function selecionarData(ano, mes, dia) {
+            const selecionado = new Date(ano, mes, dia);
+            const dataFormatada = selecionado.toISOString().split('T')[0];
+            dataInput.value = dataFormatada;
+
+            // Destacar dia selecionado
+            const botoes = diasDiv.querySelectorAll('div');
+            botoes.forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
+            event.target.classList.add('bg-indigo-600', 'text-white');
+        }
+
+        function selecionarHorario(horario) {
+            const data = dataInput.value;
+            if (!data) {
+                alert("Selecione uma data antes de escolher o horário.");
+                return;
+            }
+
+            const dataHoraFinal = `${data} ${horario}`;
+            dataHoraFinalInput.value = dataHoraFinal;
+
+            alert("Agendamento para: " + dataHoraFinal);
+
+            // Submete o formulário automaticamente
+            document.querySelector('form').submit();
+        }
+
+        renderizarCalendario();
+    </script>
+</body>
+</html>
